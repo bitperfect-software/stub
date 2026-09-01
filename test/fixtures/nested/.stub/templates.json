@@ -1,0 +1,9 @@
+{
+    "variables": [{ "name": "entity", "description": "the entity name" }],
+    "computed": [{ "name": "entityPlural", "description": "the plural", "value": "{{ entity | plural }}" }],
+    "reference": "@/{{ targetPath | remove_first: 'out/' }}",
+    "templates": {
+        "model": { "path": "out/{{ entityPlural | kebabCase }}/{{ entity }}.ts", "requires": ["schema"] },
+        "schema": { "path": "out/{{ entityPlural | kebabCase }}/{{ entity }}Schema.ts" }
+    }
+}

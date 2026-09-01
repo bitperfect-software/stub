@@ -1,0 +1,6 @@
+{
+    "templates": {
+        "useColumnsHook": { "path": "out/a.ts" },
+        "use_columns_hook": { "path": "out/b.ts" }
+    }
+}

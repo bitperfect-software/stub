@@ -1,0 +1,17 @@
+# Mirrors .prettierrc; Markdown and YAML are hand-written and only share the whitespace rules.
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+indent_style = space
+indent_size = 4
+insert_final_newline = true
+trim_trailing_whitespace = true
+
+[*.md]
+trim_trailing_whitespace = false
+
+[LICENSE]
+indent_size = unset
+trim_trailing_whitespace = false

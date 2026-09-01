@@ -1,0 +1,6 @@
+{
+    "variables": [{ "name": "entity", "description": "the entity name" }],
+    "computed": [{ "name": "force", "description": "the force value", "value": "{{ entity }}" }],
+    "switches": [{ "name": "force", "description": "forces the thing" }],
+    "templates": { "model": { "path": "out/{{ entity }}.ts" } }
+}

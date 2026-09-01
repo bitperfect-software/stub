@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+    - name: Documentation
+      url: https://bitperfect-software.github.io/stub/
+      about: The manifest format, the filters, the tags and every error message stub can print.
+    - name: Roadmap and known gaps
+      url: https://github.com/bitperfect-software/stub#roadmap
+      about: Check here before filing a feature request — several obvious gaps are deliberate.

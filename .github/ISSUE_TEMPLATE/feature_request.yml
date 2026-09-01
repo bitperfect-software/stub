@@ -1,0 +1,44 @@
+name: Feature request
+description: Suggest something stub should be able to do
+labels: [enhancement]
+body:
+    - type: markdown
+      attributes:
+          value: |
+              Please check the Roadmap in the [README](https://github.com/bitperfect-software/stub#roadmap)
+              first — `stub validate`, `--dry-run`, `stub init`, overwrite protection, conditional
+              `requires` and settings overrides are known gaps, not oversights.
+
+    - type: textarea
+      id: problem
+      attributes:
+          label: The problem
+          description: What are you trying to generate, and where does stub get in the way?
+      validations:
+          required: true
+
+    - type: textarea
+      id: proposal
+      attributes:
+          label: What you would like stub to do
+      validations:
+          required: true
+
+    - type: textarea
+      id: alternatives
+      attributes:
+          label: What you tried instead
+          description: |
+              Templates, computed values and switches cover a lot. Knowing which of them you tried
+              tells us whether this is a missing feature or a documentation gap.
+      validations:
+          required: false
+
+    - type: checkboxes
+      id: scope
+      attributes:
+          label: Scope
+          options:
+              - label: This asks stub to do something about text and templates, not about a particular
+                    framework or language — stub knows nothing about any stack, and that is deliberate.
+                required: true

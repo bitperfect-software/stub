@@ -1,0 +1,12 @@
+import assert from "node:assert/strict";
+import { test } from "node:test";
+import type { New{{ entity | pascalCase }} } from "{% reference 'model' %}";
+import { add{{ entity | pascalCase }}, list{{ entityPlural | pascalCase }} } from "{% reference 'store' %}";
+
+test("stores a new {{ entity | noCase }}", () => {
+    const draft: New{{ entity | pascalCase }} = { label: "first" };
+
+    add{{ entity | pascalCase }}(draft);
+
+    assert.equal(list{{ entityPlural | pascalCase }}().length, 1);
+});

@@ -1,0 +1,83 @@
+{
+    "name": "@bitperfect-software/stub",
+    "version": "0.1.0",
+    "description": "Stack-agnostic stub generator: turns your own LiquidJS templates into project-specific CLI commands",
+    "keywords": [
+        "cli",
+        "generator",
+        "code-generator",
+        "codegen",
+        "scaffold",
+        "scaffolding",
+        "boilerplate",
+        "stub",
+        "template",
+        "liquid",
+        "liquidjs"
+    ],
+    "license": "GPL-3.0-or-later",
+    "author": "bitperfect GmbH (https://bitperfect.at)",
+    "homepage": "https://bitperfect-software.github.io/stub/",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/bitperfect-software/stub.git"
+    },
+    "bugs": {
+        "url": "https://github.com/bitperfect-software/stub/issues"
+    },
+    "type": "module",
+    "bin": {
+        "stub": "./dist/index.js"
+    },
+    "exports": {
+        "./package.json": "./package.json"
+    },
+    "files": [
+        "dist",
+        "CHANGELOG.md"
+    ],
+    "engines": {
+        "node": ">=20.19.0"
+    },
+    "publishConfig": {
+        "access": "public"
+    },
+    "scripts": {
+        "dev": "tsx src/index.ts",
+        "build": "esbuild src/index.ts --bundle --format=esm --platform=node --target=node20 --outfile=dist/index.js --external:change-case --external:commander --external:liquidjs --external:pluralize --external:zod && node -e \"require('node:fs').chmodSync('dist/index.js', 0o755)\"",
+        "typecheck": "tsc --noEmit",
+        "lint": "eslint .",
+        "lint:fix": "eslint . --fix",
+        "test": "vitest run",
+        "test:unit": "vitest run --project unit",
+        "test:watch": "vitest --project unit",
+        "coverage": "vitest run --project unit --coverage",
+        "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\" \"eslint.config.mjs\" \"vitest.config.ts\" \".github/**/*.yml\"",
+        "format:check": "prettier --check \"src/**/*.ts\" \"test/**/*.ts\" \"eslint.config.mjs\" \"vitest.config.ts\" \".github/**/*.yml\"",
+        "check:all": "npm run typecheck && npm run lint && npm run format:check && npm test",
+        "prepack": "npm run build",
+        "prepublishOnly": "npm run check:all"
+    },
+    "dependencies": {
+        "change-case": "^5.4.4",
+        "commander": "^14.0.1",
+        "liquidjs": "^10.21.1",
+        "pluralize": "^8.0.0",
+        "zod": "^4.1.11"
+    },
+    "devDependencies": {
+        "@eslint/js": "^9.36.0",
+        "@types/node": "^20.19.0",
+        "@types/pluralize": "^0.0.33",
+        "@vitest/coverage-v8": "^4.1.11",
+        "esbuild": "^0.25.0",
+        "eslint": "^9.36.0",
+        "eslint-config-prettier": "^10.1.8",
+        "globals": "^16.4.0",
+        "prettier": "^3.6.2",
+        "tsx": "^4.20.0",
+        "typescript": "^5.9.2",
+        "typescript-eslint": "^8.44.0",
+        "vitest": "^4.1.11"
+    }
+}

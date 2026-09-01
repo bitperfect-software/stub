@@ -1,0 +1,10 @@
+{
+    "project": "stub basic example",
+    "variables": [{ "name": "name", "description": "Who the greeting is for" }],
+    "templates": {
+        "greeting": {
+            "description": "Writes a greeting file",
+            "path": "out/{{ name | kebabCase }}.txt"
+        }
+    }
+}
