@@ -1,0 +1,9 @@
+{% render "header" %}
+export interface {{ entity | pascalCase }} {
+    id: string;
+    label: string;
+    createdAt: string;
+}
+
+/** New {{ entity | noCase }} fields — the store adds id and createdAt. */
+export type New{{ entity | pascalCase }} = Omit<{{ entity | pascalCase }}, "id" | "createdAt">;

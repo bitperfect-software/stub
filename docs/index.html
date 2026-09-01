@@ -1,0 +1,555 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>stub — generate project files from your own Liquid stubs</title>
+<meta name="description" content="stub is a stack-agnostic stub generator. A .stub directory of LiquidJS templates plus a templates.json manifest becomes CLI commands that render files into your project.">
+<meta property="og:title" content="stub">
+<meta property="og:description" content="A stack-agnostic stub generator. Your templates, your stack, your project — stub just renders them.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://bitperfect-software.github.io/stub/">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232f6f4e'/%3E%3Ctext x='16' y='23' font-family='ui-monospace,monospace' font-size='20' font-weight='700' fill='%23fff' text-anchor='middle'%3Es%3C/text%3E%3C/svg%3E">
+<style>
+:root {
+    --bg: #fdfdfc;
+    --panel: #f4f4f1;
+    --ink: #1c1c1a;
+    --muted: #5d5d57;
+    --line: #e0e0da;
+    --accent: #2f6f4e;
+    --accent-ink: #fff;
+    color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #16171a;
+        --panel: #1e2024;
+        --ink: #e7e7e3;
+        --muted: #a0a09a;
+        --line: #303338;
+        --accent: #7fc4a0;
+        --accent-ink: #10231a;
+        color-scheme: dark;
+    }
+}
+* { box-sizing: border-box; }
+html { scroll-behavior: smooth; scroll-padding-top: 6rem; }
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font: 16px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    -webkit-text-size-adjust: 100%;
+}
+.wrap { max-width: 46rem; margin: 0 auto; padding: 0 1.25rem; }
+a { color: var(--accent); }
+code, pre, kbd { font-family: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace; }
+code { font-size: 0.88em; background: var(--panel); padding: 0.12em 0.35em; border-radius: 3px; }
+pre {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 0.85rem 1rem;
+    overflow-x: auto;
+    font-size: 0.84rem;
+    line-height: 1.55;
+}
+pre code { background: none; padding: 0; font-size: inherit; }
+
+header { border-bottom: 1px solid var(--line); padding: 3rem 0 2.25rem; }
+header h1 { margin: 0; font-size: 2.6rem; letter-spacing: -0.02em; }
+header p.tagline { margin: 0.35rem 0 1.25rem; color: var(--muted); font-size: 1.1rem; }
+.install { display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; }
+.install pre { margin: 0; flex: 1 1 22rem; }
+.install button {
+    font: inherit;
+    font-size: 0.8rem;
+    padding: 0.4rem 0.8rem;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    background: var(--panel);
+    color: var(--ink);
+    cursor: pointer;
+}
+.install button:hover { border-color: var(--accent); color: var(--accent); }
+nav.links { margin-top: 1.1rem; display: flex; gap: 1.1rem; flex-wrap: wrap; font-size: 0.92rem; }
+
+nav.toc {
+    position: sticky;
+    top: 0;
+    z-index: 2;
+    background: var(--bg);
+    border-bottom: 1px solid var(--line);
+    padding: 0.6rem 0;
+    font-size: 0.85rem;
+}
+nav.toc ul { margin: 0; padding: 0; list-style: none; display: flex; gap: 0.4rem 1.1rem; flex-wrap: wrap; }
+nav.toc a { color: var(--muted); text-decoration: none; }
+nav.toc a:hover { color: var(--accent); }
+/* Three wrapped rows of links would eat a third of a phone viewport, so only pin it once it is one row. */
+@media (max-width: 44rem) {
+    nav.toc { position: static; }
+    html { scroll-padding-top: 1rem; }
+}
+
+main { padding: 1rem 0 3rem; }
+h2 { margin: 2.75rem 0 0.75rem; font-size: 1.5rem; letter-spacing: -0.01em; }
+h3 { margin: 1.9rem 0 0.5rem; font-size: 1.1rem; }
+h2 + h3 { margin-top: 1rem; }
+p, ul, ol { margin: 0.75rem 0; }
+li { margin: 0.3rem 0; }
+
+table { border-collapse: collapse; width: 100%; margin: 1rem 0; font-size: 0.9rem; display: block; overflow-x: auto; }
+th, td { text-align: left; padding: 0.45rem 0.7rem; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-weight: 600; color: var(--muted); font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.04em; }
+
+.note {
+    border-left: 3px solid var(--accent);
+    background: var(--panel);
+    padding: 0.75rem 1rem;
+    margin: 1.25rem 0;
+    border-radius: 0 6px 6px 0;
+}
+.note p { margin: 0.3rem 0; }
+aside.llm { margin: 3rem 0 0; }
+
+footer {
+    border-top: 1px solid var(--line);
+    padding: 1.75rem 0 3rem;
+    color: var(--muted);
+    font-size: 0.85rem;
+}
+footer p { margin: 0.3rem 0; }
+</style>
+</head>
+<body>
+
+<header>
+    <div class="wrap">
+        <h1>stub</h1>
+        <p class="tagline">Generate project files from your own Liquid stubs. Stack-agnostic — the output is just text.</p>
+        <div class="install">
+            <pre><code id="install-cmd">npm install -g @bitperfect-software/stub</code></pre>
+            <button type="button" id="copy">Copy</button>
+        </div>
+        <nav class="links">
+            <a href="https://github.com/bitperfect-software/stub">GitHub</a>
+            <a href="https://www.npmjs.com/package/@bitperfect-software/stub">npm</a>
+            <a href="./documentation.md">Markdown reference</a>
+            <a href="https://github.com/bitperfect-software/stub/tree/main/examples">Examples</a>
+        </nav>
+    </div>
+</header>
+
+<nav class="toc">
+    <div class="wrap">
+        <ul>
+            <li><a href="#what-it-is">What it is</a></li>
+            <li><a href="#setting-up">Setting up</a></li>
+            <li><a href="#the-manifest">The manifest</a></li>
+            <li><a href="#inputs">Inputs</a></li>
+            <li><a href="#requires">requires</a></li>
+            <li><a href="#filters">Filters</a></li>
+            <li><a href="#referring">Referring to another template</a></li>
+            <li><a href="#good-to-know">Good to know</a></li>
+            <li><a href="#errors">Errors</a></li>
+            <li><a href="#not-yet">Not yet implemented</a></li>
+        </ul>
+    </div>
+</nav>
+
+<main class="wrap">
+
+<h2 id="what-it-is">What it is</h2>
+
+<p><code>stub</code> reads a <code>.stub</code> directory from your project and turns every entry in its
+manifest into a subcommand. Running one renders that entry's Liquid body — and, optionally, a whole
+chain of related entries — into files in your project.</p>
+
+<p>The output is just text: TSX, PHP, C#, CSS, SQL, Terraform, anything. <code>stub</code> has no
+opinion about it. It is built for stubs <strong>too large to keep as editor snippets</strong>: one
+command that emits a page plus its hooks, its form, its types and its API layer. For a single file with
+two substitutions, an editor snippet is the better tool.</p>
+
+<p>A stub is parameterised by three things:</p>
+<ul>
+    <li><strong>variables</strong> — required inputs the user passes positionally.</li>
+    <li><strong>computed</strong> — values derived from those variables by convention, overridable with a CLI option.</li>
+    <li><strong>switches</strong> — boolean flags that include or exclude parts of the output.</li>
+</ul>
+
+<h2 id="setting-up">Setting up</h2>
+
+<p>Create a <code>.stub</code> directory in your project root. <code>stub</code> walks up from the
+current directory until it finds one, so you can run it from anywhere inside the project.</p>
+
+<pre><code>.stub/
+  templates.json          the manifest — the catalogue of what can be generated
+  component.liquid        the body of the "component" entry
+  componentTest.liquid    the body of the "componentTest" entry</code></pre>
+
+<p>A template's body file is <strong>its manifest key plus <code>.liquid</code></strong>. There is no
+field pointing at a filename; the key is the filename.</p>
+
+<p>A <code>.liquid</code> file that no manifest entry names is not a command and is never written on its
+own. It can still be pulled into another body as a partial with Liquid's <code>{% render %}</code>,
+which is how a shared banner is done.</p>
+
+<p>Bodies are standard <a href="https://liquidjs.com/">LiquidJS</a> templates. Every LiquidJS tag and
+filter works, plus the ones <code>stub</code> adds.</p>
+
+<h2 id="the-manifest">The manifest</h2>
+
+<p><code>templates.json</code> is the catalogue. Its top level declares the inputs and conventions
+shared by everything; <code>templates</code> lists the entries themselves. This is the
+<code>examples/module</code> manifest, which exercises every feature on this page:</p>
+
+<pre><code>{
+    "project": "stub module example",
+    "variables": [{ "name": "entity", "description": "The record type to generate, e.g. Invoice" }],
+    "computed": [
+        { "name": "entityPlural", "description": "Plural form of the entity", "value": "{{ entity | plural }}" },
+        { "name": "dir", "description": "Directory the generated files go in", "value": "src/{{ entityPlural | kebabCase }}" }
+    ],
+    "switches": [{ "name": "noDelete", "description": "Omits the remove function from the store" }],
+    "reference": {
+        "default": "@/{{ targetPath | remove_first: 'src/' | replace_last: '.ts', '' }}",
+        "relative": "./{{ targetPath | split: '/' | last | replace_last: '.ts', '' }}"
+    },
+    "templates": {
+        "model": {
+            "description": "Creates a record type, its store and its test",
+            "path": "{{ dir }}/{{ entity | pascalCase }}.ts",
+            "requires": ["store", "modelTest"]
+        },
+        "store": {
+            "description": "Creates an in-memory store for a record type",
+            "path": "{{ dir }}/{{ entity | camelCase }}Store.ts"
+        },
+        "modelTest": {
+            "description": "Creates a test for a record type",
+            "path": "{{ dir }}/{{ entity | pascalCase }}.test.ts",
+            "computed": [
+                { "name": "dir", "description": "Tests live in their own tree", "value": "tests/{{ entityPlural | kebabCase }}" }
+            ]
+        }
+    }
+}</code></pre>
+
+<p>That manifest gives you three commands — <code>model</code>, <code>store</code> and
+<code>model-test</code>.</p>
+
+<h3 id="top-level-fields">Top-level fields</h3>
+
+<table>
+<tr><th>Field</th><th></th><th>Meaning</th></tr>
+<tr><td><code>templates</code></td><td><strong>required</strong></td><td>Manifest key → template. Each key becomes a command.</td></tr>
+<tr><td><code>variables</code></td><td></td><td>Inputs every command asks for.</td></tr>
+<tr><td><code>computed</code></td><td></td><td>Values every command derives.</td></tr>
+<tr><td><code>switches</code></td><td></td><td>Flags every command accepts.</td></tr>
+<tr><td><code>reference</code></td><td></td><td>How <code>{% reference %}</code> formats a path.</td></tr>
+<tr><td><code>project</code></td><td></td><td>A name for this manifest. Parsed, currently unused.</td></tr>
+</table>
+
+<h3 id="template-fields">Template fields</h3>
+
+<table>
+<tr><th>Field</th><th></th><th>Meaning</th></tr>
+<tr><td><code>path</code></td><td><strong>required</strong></td><td>Where the file goes, relative to the project root. Rendered as Liquid.</td></tr>
+<tr><td><code>description</code></td><td></td><td>Shown in <code>--help</code>. Defaults to <code>Create a new &lt;key&gt;</code>.</td></tr>
+<tr><td><code>variables</code></td><td></td><td>Inputs only this template asks for.</td></tr>
+<tr><td><code>computed</code></td><td></td><td>Values only this template derives.</td></tr>
+<tr><td><code>switches</code></td><td></td><td>Flags only this template accepts.</td></tr>
+<tr><td><code>requires</code></td><td></td><td>Other manifest keys to render in the same run.</td></tr>
+</table>
+
+<p>Every array field is optional and defaults to <code>[]</code>. Unknown fields are ignored rather than
+rejected.</p>
+
+<h2 id="inputs">Inputs</h2>
+
+<p><code>variables</code>, <code>computed</code> and <code>switches</code> all take <code>name</code> and
+<code>description</code>; <code>computed</code> additionally takes <code>value</code>.</p>
+
+<h3 id="variables">variables</h3>
+
+<p>Required positional arguments, in declaration order.</p>
+
+<pre><code>{ "name": "entity", "description": "The record type to generate" }
+
+$ stub model Invoice</code></pre>
+
+<h3 id="computed">computed</h3>
+
+<p>Optional overrides. <code>value</code> is a Liquid expression evaluated against the input, and
+passing the option <strong>skips the expression entirely</strong>.</p>
+
+<pre><code>{ "name": "entityPlural", "description": "Plural form", "value": "{{ entity | plural }}" }
+
+$ stub model Person                        # entityPlural is "People"
+$ stub model Person --entityPlural Leute   # the expression never runs</code></pre>
+
+<h3 id="switches">switches</h3>
+
+<p>Boolean flags. Inside a body a switch is simply truthy.</p>
+
+<pre><code>{ "name": "noDelete", "description": "Omits the remove function" }
+
+$ stub model Invoice --noDelete
+
+{%- unless noDelete %} … {%- endunless %}</code></pre>
+
+<div class="note">
+<p><strong>A switch removes content, not files.</strong> It can drop a block inside a body, but it
+cannot drop an entry from the run — a template whose whole body is switched off still writes an empty
+file. Conditional <code>requires</code> is planned.</p>
+</div>
+
+<h3 id="merging">Merging and order</h3>
+
+<p>A command's inputs are the manifest globals, plus the template's own declarations, plus those of
+everything it <code>requires</code>, deduplicated by name. <strong>The first declaration of a name
+wins</strong>, so a global beats a template-local one <em>for what the command exposes</em>.</p>
+
+<p>At render time each template derives the globals plus <strong>its own</strong> <code>computed</code>
+— and there the later declaration wins, so a template-local value shadows a global of the same name in
+its own output. Above, <code>modelTest</code> redeclares <code>dir</code>, so <code>stub model
+Invoice</code> writes:</p>
+
+<pre><code>src/invoices/Invoice.ts
+src/invoices/invoiceStore.ts
+tests/invoices/Invoice.test.ts      &lt;- modelTest's own dir</code></pre>
+
+<p>That asymmetry is deliberate: every template derives its scope from the same raw input, never from a
+parent's scope, so one override reaches the whole chain. It also means passing <code>--dir</code> on the
+command line short-circuits derivation everywhere, collapsing the shadowing — an override is a value,
+not an expression. Values are derived left to right, so a later expression can build on an earlier
+one.</p>
+
+<h3 id="naming">Naming</h3>
+
+<p>Command names are <strong>kebab-cased</strong> from the manifest key: <code>useColumnsHook</code>
+becomes <code>stub use-columns-hook</code>. Option names are used <strong>exactly as declared</strong>:
+<code>--entityPlural</code>, <code>--noDelete</code>.</p>
+
+<h2 id="requires">requires</h2>
+
+<p><code>"requires": ["store", "modelTest"]</code> renders those entries in the same run, from the same
+input. It is <strong>transitive</strong>, each entry is rendered <strong>once</strong>, and cycles
+terminate safely. A command exposes the options of everything it requires, so a single override reaches
+the whole chain.</p>
+
+<pre><code>$ stub --noRequires model Invoice     # renders only the model</code></pre>
+
+<p><code>--noRequires</code> is a <strong>program option</strong>, so it goes before the command
+name.</p>
+
+<h2 id="filters">Filters</h2>
+
+<p>On top of <a href="https://liquidjs.com/filters/overview.html">every standard LiquidJS filter</a>:</p>
+
+<table>
+<tr><th>Family</th><th>Filters</th><th>Example</th></tr>
+<tr>
+    <td>Case</td>
+    <td><code>camelCase</code> <code>capitalCase</code> <code>constantCase</code> <code>dotCase</code>
+        <code>kebabCase</code> <code>noCase</code> <code>pascalCase</code> <code>pascalSnakeCase</code>
+        <code>pathCase</code> <code>sentenceCase</code> <code>snakeCase</code> <code>trainCase</code></td>
+    <td><code>{{ "two words" | pascalCase }}</code> → <code>TwoWords</code></td>
+</tr>
+<tr>
+    <td>Number</td>
+    <td><code>plural</code> <code>singular</code> (English only)</td>
+    <td><code>{{ "person" | plural }}</code> → <code>people</code></td>
+</tr>
+<tr>
+    <td>Fallback</td>
+    <td><code>override</code></td>
+    <td><code>{{ entityPlural | override: custom }}</code> → <code>custom</code> if set, else <code>entityPlural</code></td>
+</tr>
+</table>
+
+<p>All twelve case filters, applied to <code>two words</code>:</p>
+
+<table>
+<tr><th>Filter</th><th>Result</th><th>Filter</th><th>Result</th></tr>
+<tr><td><code>camelCase</code></td><td><code>twoWords</code></td><td><code>pascalCase</code></td><td><code>TwoWords</code></td></tr>
+<tr><td><code>capitalCase</code></td><td><code>Two Words</code></td><td><code>pascalSnakeCase</code></td><td><code>Two_Words</code></td></tr>
+<tr><td><code>constantCase</code></td><td><code>TWO_WORDS</code></td><td><code>pathCase</code></td><td><code>two/words</code></td></tr>
+<tr><td><code>dotCase</code></td><td><code>two.words</code></td><td><code>sentenceCase</code></td><td><code>Two words</code></td></tr>
+<tr><td><code>kebabCase</code></td><td><code>two-words</code></td><td><code>snakeCase</code></td><td><code>two_words</code></td></tr>
+<tr><td><code>noCase</code></td><td><code>two words</code></td><td><code>trainCase</code></td><td><code>Two-Words</code></td></tr>
+</table>
+
+<p>They accept <code>twoWords</code> as readily as <code>two words</code>; the input is split on case
+boundaries first.</p>
+
+<h2 id="referring">Referring to another template</h2>
+
+<p>A stub rarely stands alone: a store imports its model, a test imports both. Each of those files is
+its own manifest entry with its own <code>path</code>, so without help every body ends up retyping a
+sibling's path — and the moment that entry's <code>path</code> changes, every hand-written copy silently
+points at nothing. Two tags let a body <strong>ask the manifest</strong> instead.</p>
+
+<h3 id="path-tag">{% path %}</h3>
+
+<p><code>{% path "model" %}</code> emits the target file <strong>project-root-relative</strong> —
+byte-for-byte the path this run writes that entry to:</p>
+
+<pre><code>src/invoices/Invoice.ts</code></pre>
+
+<h3 id="reference-tag">{% reference %}</h3>
+
+<pre><code>{% reference "model" %}                  @/invoices/Invoice
+{% reference "model" as: "relative" %}   ./Invoice</code></pre>
+
+<p>The same target, run through a reference format — how you bridge "the file lives at
+<code>src/invoices/…</code>" and "the import reads <code>@/invoices/…</code>". The argument to both tags
+is the <strong>manifest key</strong> of the entry you are pointing at, not a filename.</p>
+
+<h3 id="reference-formats">Reference formats</h3>
+
+<p>Add a top-level <code>reference</code> field. It is a Liquid expression in which
+<strong><code>targetPath</code></strong> is the target entry's rendered path.</p>
+
+<pre><code>{ "reference": "@/{{ targetPath | remove_first: 'src/' }}" }</code></pre>
+
+<p>If one is not enough — imports use an alias, links need a URL — use named formats:</p>
+
+<pre><code>{
+    "reference": {
+        "default": "@/{{ targetPath | remove_first: 'src/' | replace_last: '.ts', '' }}",
+        "relative": "./{{ targetPath | split: '/' | last | replace_last: '.ts', '' }}"
+    }
+}</code></pre>
+
+<p>A format is rendered with the <strong>target's</strong> own scope — its variables and its
+<code>computed</code>, so <code>{{ entity }}</code> inside a format means the <em>target's</em> entity —
+plus <code>targetPath</code>.</p>
+
+<h3 id="the-rules">The rules</h3>
+
+<table>
+<tr><th><code>reference</code> declares</th><th><code>{% reference "x" %}</code></th><th><code>{% reference "x" as: "y" %}</code></th></tr>
+<tr><td>nothing</td><td>falls back to the raw path, like <code>{% path %}</code></td><td>error</td></tr>
+<tr><td>one unnamed format</td><td>uses it</td><td>error — drop the <code>as:</code></td></tr>
+<tr><td>named formats, one called <code>default</code></td><td>uses <code>default</code></td><td>uses <code>y</code>, or errors if undeclared</td></tr>
+<tr><td>named formats, none called <code>default</code></td><td>error — names the ones you did declare</td><td>uses <code>y</code>, or errors if undeclared</td></tr>
+</table>
+
+<p>So you can start with no <code>reference</code> field at all and add one when you need it.</p>
+
+<h2 id="good-to-know">Good to know</h2>
+
+<div class="note">
+<p><strong>stub overwrites existing files without asking.</strong> Running a command twice destroys
+hand-edits, with no warning and no <code>--force</code>. Generate into a clean tree, or commit before
+you regenerate.</p>
+</div>
+
+<ul>
+    <li><strong>Nothing is written unless everything renders.</strong> A run computes every target path
+        and every file body before it touches disk, so a failure anywhere leaves the tree exactly as it
+        was.</li>
+    <li><strong>The extension is emitted verbatim.</strong> <code>{% reference "model" %}</code> ends in
+        <code>.ts</code> if the entry's <code>path</code> does. Trim it inside the format.</li>
+    <li><strong>A tag's output cannot be piped.</strong> To pipe a raw path, capture it first:
+        <code>{% capture target %}{% path "model" %}{% endcapture %}</code>.</li>
+    <li><strong>Both tags take a quoted literal only.</strong> <code>{% path model %}</code> is rejected
+        at parse time — which means every reference is checkable without running anything.</li>
+    <li><strong>Both are independent of <code>requires</code>.</strong> They resolve any entry in the
+        manifest, including one this invocation does not write, the current template itself, and an
+        entry that points back at this one. Nothing loops.</li>
+    <li><strong>The tags work in template bodies only</strong> — not inside a manifest <code>path</code>,
+        <code>computed.value</code> or <code>reference</code> expression. That restriction is what keeps
+        them non-recursive.</li>
+    <li><strong>They work inside a <code>{% render %}</code> partial</strong>, even though
+        <code>{% render %}</code> gives the partial an isolated scope that sees none of your
+        variables.</li>
+    <li><strong>Tags and variables do not collide.</strong> <code>{% path "x" %}</code> is the tag;
+        <code>{{ path }}</code> is still your own variable called <code>path</code>.</li>
+    <li><strong>Wrap literal braces Liquid must not touch</strong> in
+        <code>{% raw %} … {% endraw %}</code>.</li>
+</ul>
+
+<h2 id="errors">Errors</h2>
+
+<p>Every message below is a problem with the project, not with <code>stub</code>, and is printed without
+a stack trace. Set <code>STUB_DEBUG=1</code> to get the stack anyway. Anything reported as
+<em>"This is a defect in stub"</em> is worth
+<a href="https://github.com/bitperfect-software/stub/issues">an issue</a>.</p>
+
+<table>
+<tr><th>Message</th><th>What it means</th></tr>
+<tr><td><code>Could not find a .stub directory in … or any parent directory</code></td><td>You are outside a project that has one. <code>stub guide</code>, <code>--help</code> and <code>--version</code> still work.</td></tr>
+<tr><td><code>File not found: …/templates.json</code></td><td>The <code>.stub</code> directory exists but has no manifest.</td></tr>
+<tr><td><code>Invalid JSON in file: …</code></td><td><code>templates.json</code> does not parse.</td></tr>
+<tr><td><code>Invalid manifest …</code></td><td>It parses but does not match the schema. Zod's field-by-field output follows.</td></tr>
+<tr><td><code>Unknown template x</code></td><td>A <code>requires</code> entry, or a command, names a key the manifest does not declare.</td></tr>
+<tr><td><code>ENOENT: Failed to lookup "x" in "…"</code></td><td>The manifest declares <code>x</code> but <code>.stub/x.liquid</code> is missing.</td></tr>
+<tr><td><code>tag {% if x %} not closed, line:1, col:1</code></td><td>A Liquid syntax error in a body, with its file, line and column.</td></tr>
+<tr><td><code>{% path %} expects a quoted template name</code></td><td>The argument was a variable or was unquoted.</td></tr>
+<tr><td><code>{% path "x" %} refers to a template that is not in the manifest</code></td><td>Typo in a manifest key.</td></tr>
+<tr><td><code>{% path %} is only available in a template body</code></td><td>A tag was used in a <code>path</code>, <code>computed.value</code> or <code>reference</code>.</td></tr>
+<tr><td><code>{% reference "x" %} needs a format name</code></td><td>Named formats, none called <code>default</code>. Add <code>as:</code>.</td></tr>
+<tr><td><code>… declares a single unnamed format, so drop the "as:"</code></td><td><code>as:</code> was passed where there is nothing to pick between.</td></tr>
+<tr><td><code>… is not a declared reference format</code></td><td>Typo in the format name; the message lists the ones that exist.</td></tr>
+<tr><td><code>cannot add command 'x' as already have command 'x'</code></td><td>Two manifest keys kebab-case to the same command name.</td></tr>
+<tr><td><code>Cannot add option '--x' … due to conflicting flag</code></td><td>A <code>computed</code> and a <code>switch</code> share a name.</td></tr>
+</table>
+
+<p>A broken manifest does not take <code>stub guide</code>, <code>stub --help</code> or
+<code>stub --version</code> down with it — the help output carries the reason as a footer instead. Those
+are the commands you run <em>because</em> the project is broken.</p>
+
+<h2 id="not-yet">Not yet implemented</h2>
+
+<p>Planned, and deliberately not in 0.1.0. Nothing on this page or in <code>stub --help</code> promises
+them.</p>
+
+<table>
+<tr><td><code>stub validate</code></td><td>Check every manifest entry, path and cross-reference without rendering.</td></tr>
+<tr><td><code>--dry-run</code></td><td>Print the files a run would write, and write none of them.</td></tr>
+<tr><td><code>stub variables &lt;template&gt;</code></td><td>List the inputs a command takes, as data.</td></tr>
+<tr><td><code>stub docs</code></td><td>Per-template Markdown generated from the manifest.</td></tr>
+<tr><td><code>stub init</code></td><td>Scaffold a <code>.stub</code> directory from one of the shipped examples.</td></tr>
+<tr><td>Settings overrides</td><td>A configurable directory name and manifest filename.</td></tr>
+<tr><td>Overwrite protection</td><td>Refuse by default, with <code>--force</code>, or show a diff first.</td></tr>
+<tr><td>Conditional <code>requires</code></td><td>So a switch can remove a <em>file</em>, not only content inside one.</td></tr>
+</table>
+
+<aside class="llm">
+<div class="note">
+<p><strong>Reading this as an LLM?</strong> Use <a href="./documentation.md">documentation.md</a> — the
+same reference as Markdown, and the source this page presents.</p>
+</div>
+</aside>
+
+</main>
+
+<footer>
+    <div class="wrap">
+        <p>GPL-3.0-or-later · © 2026 <a href="https://bitperfect.at">bitperfect GmbH</a>. The files
+        <code>stub</code> generates for you are yours; the licence covers <code>stub</code> itself.</p>
+        <p>Built with Commander, LiquidJS, Zod, change-case and pluralize.</p>
+    </div>
+</footer>
+
+<script>
+document.getElementById("copy").addEventListener("click", async (event) => {
+    const button = event.currentTarget;
+
+    try {
+        await navigator.clipboard.writeText(document.getElementById("install-cmd").textContent);
+        button.textContent = "Copied";
+    } catch {
+        button.textContent = "Press ⌘C";
+    }
+
+    setTimeout(() => { button.textContent = "Copy"; }, 1800);
+});
+</script>
+
+</body>
+</html>

@@ -1,0 +1,11 @@
+# Settings only — this is a single-package repository, not a workspace.
+# pnpm 11 no longer reads the "pnpm" field from package.json.
+
+# Never install a version published less than seven days ago (the unit is minutes).
+# Releases get a week to be yanked or patched before they can reach this project.
+minimumReleaseAge: 10080
+
+# esbuild links a platform-native binary in a postinstall script. pnpm 11 refuses
+# to run any lifecycle script that has not been ruled on here, one way or the other.
+allowBuilds:
+    esbuild: true

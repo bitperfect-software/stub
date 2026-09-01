@@ -1,0 +1,4 @@
+{
+    "variables": [{ "name": "entity", "description": "the entity name" }],
+    "templates": { "model": { "path": "out/{{ entity }}.ts" } }
+}

@@ -1,0 +1,79 @@
+name: Bug report
+description: Something stub does is wrong, or crashes
+labels: [bug]
+body:
+    - type: markdown
+      attributes:
+          value: |
+              Thanks for the report. The two things that make a stub bug reproducible are the manifest
+              entry and the `STUB_DEBUG=1` output — please do not skip those two fields.
+
+    - type: input
+      id: stub-version
+      attributes:
+          label: stub version
+          description: Output of `stub --version`
+          placeholder: "0.1.0"
+      validations:
+          required: true
+
+    - type: input
+      id: node-version
+      attributes:
+          label: Node version
+          description: Output of `node --version`
+          placeholder: v22.11.0
+      validations:
+          required: true
+
+    - type: input
+      id: os
+      attributes:
+          label: Operating system
+          placeholder: Ubuntu 24.04 / macOS 15.2 / Windows 11
+      validations:
+          required: true
+
+    - type: textarea
+      id: manifest
+      attributes:
+          label: A minimal .stub/templates.json
+          description: Cut it down to the smallest manifest that still shows the problem.
+          render: json
+      validations:
+          required: true
+
+    - type: textarea
+      id: templates
+      attributes:
+          label: The template bodies it refers to
+          description: Only the `.liquid` files needed by the manifest above.
+      validations:
+          required: false
+
+    - type: input
+      id: command
+      attributes:
+          label: The command you ran
+          placeholder: stub model invoice --noDelete
+      validations:
+          required: true
+
+    - type: textarea
+      id: expected
+      attributes:
+          label: Expected versus actual
+          description: What you expected to be written, and what happened instead.
+      validations:
+          required: true
+
+    - type: textarea
+      id: debug
+      attributes:
+          label: Output of STUB_DEBUG=1
+          description: |
+              Re-run with `STUB_DEBUG=1` in front of the command. stub prints a one-line error by
+              default; this variable is what turns the stack trace back on.
+          render: shell
+      validations:
+          required: true

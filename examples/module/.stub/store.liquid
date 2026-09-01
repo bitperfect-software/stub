@@ -1,0 +1,17 @@
+{% render "header" %}
+import type { {{ entity | pascalCase }}, New{{ entity | pascalCase }} } from "{% reference 'model' as: 'relative' %}";
+
+const {{ entityPlural | camelCase }} = new Map<string, {{ entity | pascalCase }}>();
+
+export const add{{ entity | pascalCase }} = (draft: New{{ entity | pascalCase }}): {{ entity | pascalCase }} => {
+    const {{ entity | camelCase }} = { ...draft, id: String({{ entityPlural | camelCase }}.size + 1), createdAt: new Date().toISOString() };
+
+    {{ entityPlural | camelCase }}.set({{ entity | camelCase }}.id, {{ entity | camelCase }});
+    return {{ entity | camelCase }};
+};
+
+export const list{{ entityPlural | pascalCase }} = (): Array<{{ entity | pascalCase }}> => [...{{ entityPlural | camelCase }}.values()];
+{%- unless noDelete %}
+
+export const remove{{ entity | pascalCase }} = (id: string): boolean => {{ entityPlural | camelCase }}.delete(id);
+{%- endunless %}

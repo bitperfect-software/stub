@@ -1,0 +1,34 @@
+version: 2
+updates:
+    - package-ecosystem: npm # also drives pnpm-lock.yaml
+      directory: /
+      schedule:
+          interval: weekly
+      open-pull-requests-limit: 5
+      # Mirrors `minimumReleaseAge` in pnpm-workspace.yaml. Without this Dependabot would
+      # keep proposing versions that a local `pnpm install` then refuses to resolve.
+      cooldown:
+          default-days: 7
+      groups:
+          dev-dependencies:
+              dependency-type: development
+      ignore:
+          # @types/node tracks the oldest runtime we support, not the newest one released.
+          # `engines.node` is >=22.12.0, so this has to stay on the 22.x line or the types
+          # start describing APIs that are absent on the floor of the supported range.
+          - dependency-name: "@types/node"
+            update-types: ["version-update:semver-major"]
+          # typescript-eslint 8.x declares `typescript: >=4.8.4 <6.1.0`, so TypeScript 7 cannot
+          # lint. Drop this entry once typescript-eslint widens that range.
+          - dependency-name: "typescript"
+            update-types: ["version-update:semver-major"]
+
+    - package-ecosystem: github-actions
+      directory: /
+      schedule:
+          interval: weekly
+      cooldown:
+          default-days: 7
+      groups:
+          actions:
+              patterns: ["*"]

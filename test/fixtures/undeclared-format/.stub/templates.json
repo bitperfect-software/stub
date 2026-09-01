@@ -1,0 +1,8 @@
+{
+    "variables": [{ "name": "entity", "description": "the entity name" }],
+    "reference": { "module": "@/{{ targetPath }}", "url": "/{{ targetPath }}" },
+    "templates": {
+        "model": { "path": "out/{{ entity }}.ts", "requires": ["schema"] },
+        "schema": { "path": "out/{{ entity }}Schema.ts" }
+    }
+}

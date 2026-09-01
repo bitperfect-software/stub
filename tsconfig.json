@@ -1,0 +1,45 @@
+{
+    "compilerOptions": {
+        // Language level. `target` is what the source may use; the shipped bundle is downlevelled by
+        // esbuild to the floor in package.json "engines", so these two are allowed to differ.
+        "lib": ["ES2023"],
+        "target": "ES2023",
+        "module": "ESNext",
+        "moduleResolution": "bundler",
+        "moduleDetection": "force",
+        "types": ["node"],
+
+        // The build bundles, so a `.ts` specifier never reaches a runtime resolver.
+        "allowImportingTsExtensions": true,
+        "verbatimModuleSyntax": true,
+        "esModuleInterop": true,
+        "isolatedModules": true,
+        "noEmit": true,
+
+        // Import style: `io/writeTextFile.ts`, never `../io/writeTextFile.ts`. Spelled as explicit
+        // `paths` rather than a bare `baseUrl` because that is the form esbuild and tsx implement.
+        "baseUrl": ".",
+        "paths": {
+            "commands/*": ["src/commands/*"],
+            "errors/*": ["src/errors/*"],
+            "io/*": ["src/io/*"],
+            "manifest/*": ["src/manifest/*"],
+            "render/*": ["src/render/*"],
+            "settings/*": ["src/settings/*"],
+            "templates/*": ["src/templates/*"],
+            "workspace/*": ["src/workspace/*"],
+            "test/*": ["test/*"]
+        },
+
+        // Best practices
+        "strict": true,
+        "skipLibCheck": true,
+        "noFallthroughCasesInSwitch": true,
+        "noUncheckedIndexedAccess": true,
+        "noImplicitOverride": true,
+        "noUnusedLocals": true,
+        "noUnusedParameters": true,
+        "erasableSyntaxOnly": true
+    },
+    "include": ["src/**/*.ts", "test/**/*.ts", "vitest.config.ts"]
+}

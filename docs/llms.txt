@@ -1,0 +1,30 @@
+# stub
+
+> A stack-agnostic stub generator. A `.stub` directory of LiquidJS templates plus a `templates.json`
+> manifest becomes CLI commands that render files into your project. The output is just text, and
+> everything stub knows about your stack lives in your project, never in stub.
+
+Install: `npm install -g @bitperfect-software/stub`. Requires Node >= 22.12.
+
+## Docs
+
+- [Full reference](https://bitperfect-software.github.io/stub/documentation.md): the manifest format,
+  inputs, `requires`, the filters, the `{% path %}` and `{% reference %}` tags, the error messages, and
+  what is deliberately not implemented in 0.1.0.
+- [README](https://github.com/bitperfect-software/stub/blob/main/README.md): install and a 30-second
+  example.
+- [Documentation site](https://bitperfect-software.github.io/stub/): the same reference as a web page.
+
+## Examples
+
+- [basic](https://github.com/bitperfect-software/stub/tree/main/examples/basic): one variable, a
+  Liquid-rendered path, two filters.
+- [module](https://github.com/bitperfect-software/stub/tree/main/examples/module): computed values, a
+  template-local computed that shadows a global, a switch, transitive `requires`, both cross-reference
+  tags and a `{% render %}` partial.
+
+## Optional
+
+- [Contributing](https://github.com/bitperfect-software/stub/blob/main/CONTRIBUTING.md): architecture,
+  conventions and how to run the suite.
+- [Issues](https://github.com/bitperfect-software/stub/issues)

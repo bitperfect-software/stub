@@ -1,0 +1,31 @@
+{
+    "project": "stub module example",
+    "variables": [{ "name": "entity", "description": "The record type to generate, e.g. Invoice" }],
+    "computed": [
+        { "name": "entityPlural", "description": "Plural form of the entity", "value": "{{ entity | plural }}" },
+        { "name": "dir", "description": "Directory the generated files go in", "value": "src/{{ entityPlural | kebabCase }}" }
+    ],
+    "switches": [{ "name": "noDelete", "description": "Omits the remove function from the store" }],
+    "reference": {
+        "default": "@/{{ targetPath | remove_first: 'src/' | replace_last: '.ts', '' }}",
+        "relative": "./{{ targetPath | split: '/' | last | replace_last: '.ts', '' }}"
+    },
+    "templates": {
+        "model": {
+            "description": "Creates a record type, its store and its test",
+            "path": "{{ dir }}/{{ entity | pascalCase }}.ts",
+            "requires": ["store", "modelTest"]
+        },
+        "store": {
+            "description": "Creates an in-memory store for a record type",
+            "path": "{{ dir }}/{{ entity | camelCase }}Store.ts"
+        },
+        "modelTest": {
+            "description": "Creates a test for a record type",
+            "path": "{{ dir }}/{{ entity | pascalCase }}.test.ts",
+            "computed": [
+                { "name": "dir", "description": "Tests live in their own tree", "value": "tests/{{ entityPlural | kebabCase }}" }
+            ]
+        }
+    }
+}
