@@ -60,7 +60,7 @@
     },
     "dependencies": {
         "change-case": "^5.4.4",
-        "commander": "^14.0.1",
+        "commander": "^15.0.0",
         "liquidjs": "^10.21.1",
         "pluralize": "^8.0.0",
         "zod": "^4.1.11"
