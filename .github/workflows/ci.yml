@@ -52,6 +52,18 @@ jobs:
                   name: tarball
                   path: ${{ runner.temp }}/*.tgz
                   if-no-files-found: error
+            # npm rewrites the manifest only at publish time, after `npm pack` and `pnpm pack`, and
+            # can silently drop fields such as `bin`. The throwaway version keeps the dry run from
+            # refusing a version that is already on the registry.
+            - name: Dry-run the npm publish
+              shell: bash
+              run: |
+                  npm version "0.0.0-ci.${GITHUB_RUN_ID}" --no-git-tag-version
+                  npm publish --dry-run --tag ci 2>&1 | tee "$RUNNER_TEMP/publish.log"
+                  if grep -q "errors corrected" "$RUNNER_TEMP/publish.log"; then
+                    echo "::error::npm publish would rewrite package.json; run 'npm pkg fix' and check the result"
+                    exit 1
+                  fi
 
     consume:
         # pnpm 11 needs Node >= 22.13, a hair above the package's own >= 22.12.0 floor.
