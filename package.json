@@ -1,6 +1,6 @@
 {
     "name": "@bitperfect-software/stub",
-    "version": "0.1.0",
+    "version": "0.1.1",
     "description": "Stack-agnostic stub generator: turns your own LiquidJS templates into project-specific CLI commands",
     "keywords": [
         "cli",
