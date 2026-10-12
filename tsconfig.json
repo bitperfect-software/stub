@@ -18,17 +18,16 @@
 
         // Import style: `io/writeTextFile.ts`, never `../io/writeTextFile.ts`. Spelled as explicit
         // `paths` rather than a bare `baseUrl` because that is the form esbuild and tsx implement.
-        "baseUrl": ".",
         "paths": {
-            "commands/*": ["src/commands/*"],
-            "errors/*": ["src/errors/*"],
-            "io/*": ["src/io/*"],
-            "manifest/*": ["src/manifest/*"],
-            "render/*": ["src/render/*"],
-            "settings/*": ["src/settings/*"],
-            "templates/*": ["src/templates/*"],
-            "workspace/*": ["src/workspace/*"],
-            "test/*": ["test/*"]
+            "commands/*": ["./src/commands/*"],
+            "errors/*": ["./src/errors/*"],
+            "io/*": ["./src/io/*"],
+            "manifest/*": ["./src/manifest/*"],
+            "render/*": ["./src/render/*"],
+            "settings/*": ["./src/settings/*"],
+            "templates/*": ["./src/templates/*"],
+            "workspace/*": ["./src/workspace/*"],
+            "test/*": ["./test/*"]
         },
 
         // Best practices
