@@ -27,7 +27,7 @@
     },
     "type": "module",
     "bin": {
-        "stub": "./dist/index.js"
+        "stub": "dist/index.js"
     },
     "exports": {
         "./package.json": "./package.json"
