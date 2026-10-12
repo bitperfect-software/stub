@@ -83,4 +83,21 @@ export default defineConfig([
         ignores: ["src/commands/**", "src/index.ts"],
         rules: { "no-console": "error" },
     },
+    // A selector rather than `no-restricted-imports`: `import type { Liquid }` is used throughout src/
+    // and has to stay legal; only the value, which is what can be constructed, is confined.
+    {
+        files: ["src/**/*.ts"],
+        ignores: ["src/templates/createTemplateEngine.ts"],
+        rules: {
+            "no-restricted-syntax": [
+                "error",
+                {
+                    selector:
+                        "ImportDeclaration[source.value='liquidjs'][importKind='value'] > " +
+                        "ImportSpecifier[imported.name='Liquid'][importKind='value']",
+                    message: "The Liquid engine is constructed only in src/templates/createTemplateEngine.ts.",
+                },
+            ],
+        },
+    },
 ]);
